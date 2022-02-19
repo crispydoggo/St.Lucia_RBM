@@ -53,16 +53,17 @@ add_rbm <- function(file, n){
 
 
 RBM <- add_rbm("RBM_com_clean_StLucia.xlsx",19)
-RBM_ideal <- read_excel("RBM_ideal.xlsx")
+
+RBM_ideal <- read_excel("RBM_ideal.xlsx", sheet = 2)
 
 RBM_ideal <- RBM_ideal %>%  
             mutate( dimension_d = case_when(  
-              Dimension == 1 ~ "Institutionalization",
-              Dimension == 2 ~ "Implementation",
-              Dimension == 3 ~ "Technical",
-              Dimension == 4 ~  "Use",
+              dimension == 1 ~ "Institutionalization",
+              dimension == 2 ~ "Implementation",
+              dimension == 3 ~ "Technical",
+              dimension == 4 ~  "Use",
               ) ) %>% 
-            select(dimension = Dimension, dimension_d, bullet_id, sub_id, indicator) 
+            select(dimension, dimension_d, bullet_id, sub_id, indicator, label) 
 
 RBM_full <- left_join(RBM,RBM_ideal)
 
@@ -106,7 +107,7 @@ for ( i in 1:4){
             filter( bullet_id == j) %>% 
             filter( sub_id == k)
       
-      cat(paste0( "\n\n#### Sub-element  ",k, " {-} \n\n"))
+      cat(paste0( "\n\n#### ", j ,".",k, " ", filter(stage_2, sub_id == k)$label[1], " {-} \n\n"))
       
       cat(paste0( " > ", filter(stage_2, sub_id == k)$indicator[1]), "\n\n")
       
@@ -128,7 +129,5 @@ for ( i in 1:4){
 
 
 ```
-
-
 
 
